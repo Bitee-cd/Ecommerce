@@ -39,7 +39,6 @@ const ProductScreen = () => {
             alt={product.name}
             width={640}
             height={640}
-            layout="responsive"
           />
         </div>
         <div>

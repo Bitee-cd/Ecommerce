@@ -22,15 +22,16 @@ const Layout = ({ title, children }) => {
             </Link>
             <div className="flex gap-5">
               <Link href="/cart">
-                <p className="px-2">
-                  Cart
+                <div className="flex">
+                  <p className="px-1">Cart</p>
                   {cart.cartItems.length > 0 && (
                     <span className="text-sm bg-red-600 rounded-full px-2 py-1 font-bold text-white">
                       {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                     </span>
                   )}
-                </p>
+                </div>
               </Link>
+
               <Link href="/login">
                 <p className="px-2">Login</p>
               </Link>
