@@ -1,8 +1,11 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
+import { Store } from '../utils/Store';
 
 const Layout = ({ title, children }) => {
+  const { state } = useContext(Store);
+  const { cart } = state;
   const year = new Date().getFullYear();
   return (
     <>
@@ -19,7 +22,14 @@ const Layout = ({ title, children }) => {
             </Link>
             <div className="flex gap-5">
               <Link href="/cart">
-                <p className="px-2">Cart</p>
+                <p className="px-2">
+                  Cart
+                  {cart.cartItems.length > 0 && (
+                    <span className="text-sm bg-red-600 rounded-full px-2 py-1 font-bold text-white">
+                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                    </span>
+                  )}
+                </p>
               </Link>
               <Link href="/login">
                 <p className="px-2">Login</p>
