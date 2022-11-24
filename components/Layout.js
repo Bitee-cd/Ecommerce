@@ -1,12 +1,20 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Store } from '../utils/Store';
 
 const Layout = ({ title, children }) => {
   const { state } = useContext(Store);
   const { cart } = state;
+  const [newCart, setNewCart] = useState(0);
+
+  useEffect(() => {
+    setNewCart(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
+  }, [cart.cartItems]);
+
   const year = new Date().getFullYear();
+  console.log(cart);
+
   return (
     <>
       <Head>
@@ -24,11 +32,13 @@ const Layout = ({ title, children }) => {
               <Link href="/cart">
                 <div className="flex">
                   <p className="px-1">Cart</p>
-                  {cart.cartItems.length > 0 && (
-                    <span className="text-sm bg-red-600 rounded-full px-2 py-1 font-bold text-white">
-                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
-                    </span>
-                  )}
+                  <div>
+                    {newCart > 0 && (
+                      <p className="text-sm bg-red-600 rounded-full px-2 py-1 font-bold text-white">
+                        {newCart}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </Link>
 
