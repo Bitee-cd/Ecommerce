@@ -1,9 +1,13 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import React, { useContext, useEffect, useState } from 'react';
-import { Store } from '../utils/Store';
+import { useSession } from "next-auth/react";
+import Head from "next/head";
+import Link from "next/link";
+import React, { useContext, useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Store } from "../utils/Store";
 
 const Layout = ({ title, children }) => {
+  const { status, data: session } = useSession();
   const { state } = useContext(Store);
   const { cart } = state;
   const [newCart, setNewCart] = useState(0);
@@ -13,15 +17,15 @@ const Layout = ({ title, children }) => {
   }, [cart.cartItems]);
 
   const year = new Date().getFullYear();
-  console.log(cart);
 
   return (
     <>
       <Head>
-        <title>{title ? title + '- Amazona' : 'Amazona'}</title>
+        <title>{title ? title + "- Amazona" : "Amazona"}</title>
         <meta name="description" content="Ecommerce" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <ToastContainer position="bottom-center" limit={1} />
       <div className="flex min-h-screen flex-col justify-between">
         <header>
           <nav className="flex justify-between h-12 shadow-md items-center px-4">
@@ -41,10 +45,15 @@ const Layout = ({ title, children }) => {
                   </div>
                 </div>
               </Link>
-
-              <Link href="/login">
-                <p className="px-2">Login</p>
-              </Link>
+              {status === "loading" ? (
+                "Loading"
+              ) : session?.user ? (
+                session.user.name
+              ) : (
+                <Link href="/login">
+                  <p className="px-2">Login</p>
+                </Link>
+              )}
             </div>
           </nav>
         </header>
