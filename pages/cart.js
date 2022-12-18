@@ -1,10 +1,12 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useContext } from 'react';
-import Layout from '../components/Layout';
-import { Store } from '../utils/Store';
-import { XCircleIcon } from '@heroicons/react/outline';
-import { useRouter } from 'next/router';
+import Image from "next/image";
+import Link from "next/link";
+import React, { useContext } from "react";
+import Layout from "../components/Layout";
+import { Store } from "../utils/Store";
+import { XCircleIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const CartScreen = () => {
   const router = useRouter();
@@ -14,13 +16,18 @@ const CartScreen = () => {
   } = state;
 
   const removeItemHandler = (item) => {
-    console.log('item removed');
-    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+    console.log("item removed");
+    dispatch({ type: "CART_REMOVE_ITEM", payload: item });
   };
 
-  const updateCartHandler = (item, qty) => {
+  const updateCartHandler = async (item, qty) => {
     const quantity = Number(qty);
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+    const { data } = await axios.get(`api/product/${item._id}`);
+    if (data.countInStock < quantity) {
+      toast.error("Sorry, product is out of stock");
+    }
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+    toast.success("Product updated successfully");
   };
   return (
     <Layout title="shopping cart">
@@ -93,7 +100,7 @@ const CartScreen = () => {
               </li>
               <li>
                 <button
-                  onClick={() => router.push('login?redirect=/shipping')}
+                  onClick={() => router.push("login?redirect=/shipping")}
                   className="primary-button w-full"
                 >
                   Check Out
