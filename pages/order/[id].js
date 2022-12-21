@@ -180,7 +180,7 @@ const Order = () => {
                       <td className="p-5 text-right">{item.quantity}</td>
                       <td className="p-5 text-right">{item.price}</td>
                       <td className="p-5 text-right">
-                        ${item.price * item.price}
+                        ${item.price * item.quantity}
                       </td>
                     </tr>
                   ))}

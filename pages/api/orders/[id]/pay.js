@@ -5,7 +5,7 @@ import Order from "../../../../models/Order";
 const handler = async (req, res) => {
   const session = await getSession({ req });
   if (!session) {
-    return res.status(404).send("signin required");
+    return res.status(401).send({ message: "sign in required" });
   }
   await db.connect();
   const order = await Order.findById(req.query.id);
